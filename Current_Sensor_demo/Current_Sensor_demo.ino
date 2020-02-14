@@ -38,6 +38,7 @@ void loop() {
   Serial.println(amperage);
   
   write_data(amperage);  //write data
+  delay(3000);
 }
 
 void write_data(int amperage_input)
@@ -46,7 +47,7 @@ void write_data(int amperage_input)
 
   // if the file opened okay, write to it:
   if (myFile) {
-    myFile.print("_amperage_");
+    myFile.print("The current is: ");
     myFile.println(amperage_input);
     myFile.close();
     Serial.println("Write file successful!"); //print out COM Port
