@@ -38,7 +38,7 @@ void loop() {
   Serial.println(amperage);
   
   write_data(amperage);  //write data
-  delay(3000);
+  delay(30000);
 }
 
 void write_data(int amperage_input)
