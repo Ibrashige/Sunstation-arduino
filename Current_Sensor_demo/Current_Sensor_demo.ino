@@ -1,8 +1,8 @@
 #include <SPI.h>
 #include <SD.h>
 
-//int offset = 130;
-//const float vpp = 0.0048828125;
+int offset = 510;
+const float vpp = 0.0048828125;
 int points;
 int interval;
 float voltage;
@@ -32,9 +32,9 @@ void setup() {
 
 void loop() {
   interval = 1; //interval to write data
-  points = analogRead(A0) //- offset;
-  voltage = points //* vpp;
-  amperage = voltage / 0.02055;
+  points = analogRead(A0)- offset;
+  voltage = points * vpp;
+  amperage = voltage / 0.185;
   Serial.println(amperage);
   
   write_data(amperage);  //write data
