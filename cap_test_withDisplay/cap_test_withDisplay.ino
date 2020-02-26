@@ -12,8 +12,7 @@ double hold;
 LedControl lc = LedControl(4, 2, 15, 1);
 RTC_DS1307 rtc;
 
-void setup() 
-{
+void setup(){
   rtc.begin();
   lc.shutdown(0, false);
   lc.setIntensity(0, 8); // display brightness
@@ -25,8 +24,7 @@ void setup()
 
 }
 
-void loop() 
-{
+void loop(){
   boolean touchState;
   val = digitalRead(touchSw);
   touchState = digitalRead(touchSw);
@@ -65,8 +63,7 @@ if(val == HIGH){
 }
 
 //========================================================================================
-void setCol1 (byte jam) 
-{
+void setCol1 (byte jam){
   String strBuffer = Konversi(jam);
   byte pjg = strBuffer.length() + 1;
   char val[pjg];
@@ -76,8 +73,7 @@ void setCol1 (byte jam)
 }
 
 //========================================================================================
-void setCol2 (byte mnt) 
-{
+void setCol2 (byte mnt){
   String strBuffer = Konversi(mnt);
   byte pjg = strBuffer.length() + 1;
   char val[pjg];
@@ -86,8 +82,7 @@ void setCol2 (byte mnt)
   lc.setChar (0, 0, val[1], false);
 }
 
-void setCol3 (byte dtk) 
-{
+void setCol3 (byte dtk){
   String strBuffer = Konversi(dtk);
   byte pjg = strBuffer.length() + 1;
   char val[pjg];
@@ -96,8 +91,7 @@ void setCol3 (byte dtk)
   lc.setChar (0, 7, val[1], false);
 }
 
-void setCounter (byte kim)
-{
+void setCounter (byte kim){
   String strBuffer = Konversi(kim);
   byte pjg = strBuffer.length() + 1;
   char val[pjg];
@@ -108,8 +102,7 @@ void setCounter (byte kim)
   lc.setChar (0, 0, val[1], false);
 }
 
-String Konversi(int nilai) 
-{
+String Konversi(int nilai){
   if (nilai < 10) 
   {
      return "0" + String(nilai);
