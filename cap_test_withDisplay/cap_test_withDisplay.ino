@@ -32,38 +32,30 @@ void loop()
   touchState = digitalRead(touchSw);
 // if(touchState == HIGH)
 // {
-if(val == HIGH)
-{
-  if(val == HIGH)
-    {
+if(val == HIGH){
+  if(val == HIGH){
       currentState = 1;
-    }
-    else
-    {
+  }
+  else if (val != HIGH){
       currentState = 0;
-    }
-    if(currentState != previousState)
-    {
-      if(currentState == 1)
-      {
+  }
+  else if(currentState != previousState){
+      if(currentState == 1){
         counter = counter + 1;
         Serial.println(counter);
       }
-    }
-     previousState = currentState;
-     delay(250);
+  }
+  previousState = currentState;
+  delay(250);
      
-     hold = millis();
-  while ((hold + 5000) > millis() ) 
-  {
+  hold = millis();
+  while ((hold + 5000) > millis()){
      setCounter(counter);
   }
 }
-  else
-  {
+  else{
     hold = millis();
-  while ((hold + 1000) > millis() ) 
-      {
+  while ((hold + 1000) > millis()){
       DateTime now = rtc.now();
       setCol1(now.hour());
       setCol2(now.minute());
