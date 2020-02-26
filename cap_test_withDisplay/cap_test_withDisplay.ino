@@ -31,6 +31,7 @@ void loop(){
 // if(touchState == HIGH)
 // {
 if(val == HIGH){
+  counter = 0;
   if(val == HIGH){
       currentState = 1;
   }
