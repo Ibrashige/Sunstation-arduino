@@ -1,63 +1,58 @@
-/***************************************************
-  This is an example for the Adafruit Thermocouple Sensor w/MAX31855K
+#include <SD.h>
 
-  Designed specifically to work with the Adafruit Thermocouple Sensor
-  ----> https://www.adafruit.com/products/269
+File myFile;
 
-  These displays use SPI to communicate, 3 pins are required to
-  interface
-  Adafruit invests time and resources providing this open source code,
-  please support Adafruit and open-source hardware by purchasing
-  products from Adafruit!
-
-  Written by Limor Fried/Ladyada for Adafruit Industries.
-  BSD license, all text above must be included in any redistribution
- ****************************************************/
-
-#include <SPI.h>
-#include "Adafruit_MAX31855.h"
-
-// Default connection is using software SPI, but comment and uncomment one of
-// the two examples below to switch between software SPI and hardware SPI:
-
-// Example creating a thermocouple instance with software SPI on any three
-// digital IO pins.
-#define MAXDO   3
-#define MAXCS   4
-#define MAXCLK  5
-
-// initialize the Thermocouple
-Adafruit_MAX31855 thermocouple(MAXCLK, MAXCS, MAXDO);
-
-// Example creating a thermocouple instance with hardware SPI
-// on a given CS pin.
-//#define MAXCS   10
-//Adafruit_MAX31855 thermocouple(MAXCS);
+#define TC_PIN A0          // set to ADC pin used
+#define AREF 5           // set to AREF, typically board voltage like 3.3 or 5.0
+#define ADC_RESOLUTION 10  // set to ADC bit resolution, 10 is default
+ 
+float reading, voltage, temperature;
+ 
+float get_voltage(int raw_adc) {
+  return raw_adc * (AREF / (pow(2, ADC_RESOLUTION)-1));  
+}
+ 
+float get_temperature(float voltage) {
+  return (voltage - 1.25) / 0.005;
+}
 
 void setup() {
   Serial.begin(9600);
-
-  while (!Serial) delay(1); // wait for Serial on Leonardo/Zero, etc
-
-  Serial.println("MAX31855 test");
-  // wait for MAX chip to stabilize
-  delay(500);
+  Serial.print("Initializing SD card...");
+  if (!SD.begin(10)) {
+    Serial.println("initialization failed!");
+  }
+  else
+  {
+    Serial.println("initialization done.");
+  }
 }
 
 void loop() {
-  // basic readout test, just print the current temp
-   Serial.print("Internal Temp = ");
-   Serial.println(thermocouple.readInternal());
 
-   double c = thermocouple.readCelsius();
-   if (isnan(c)) {
-     Serial.println("Something wrong with thermocouple!");
-   } else {
-     Serial.print("C = ");
-     Serial.println(c);
-   }
-   //Serial.print("F = ");
-   //Serial.println(thermocouple.readFahrenheit());
+  reading = analogRead(TC_PIN);
+  voltage = get_voltage(reading);
+  temperature = get_temperature(voltage);
+  Serial.print("Temperature = ");
+  Serial.print(temperature);
+  Serial.println(" C");
+  delay(500);
+  
+  write_data(temperature);  //write data
+  delay(60000);
+}
 
-   delay(1000);
+void write_data(int temp_input)
+{
+  myFile = SD.open("test.csv", FILE_WRITE);
+
+  // if the file opened okay, write to it:
+  if (myFile) {
+    myFile.print("The Temperature is: ");
+    myFile.println(temp_input);
+    myFile.close();
+    Serial.println("Write file successful!"); //print out COM Port
+  } else {
+    Serial.println("error opening test.txt");
+  }
 }
