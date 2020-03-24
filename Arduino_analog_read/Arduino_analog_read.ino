@@ -1,5 +1,4 @@
 // Print battery voltage
-// to 16x2 LCD via I2C
 // with Voltage Divider (2x 10K resistor)
 /*
   Resistors are aligned in series.
