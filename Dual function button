@@ -1,1 +1,53 @@
+int buttonpin = 9;
+int buttonstate = 0;
+int ledpin=5;
+int enable_pin=4;
 
+boolean enableState = false;
+boolean LEDState = false;
+long buttonTimer = 0;
+long longPressTime = 250;
+
+boolean buttonActive = false;
+boolean longPressActive = false;
+
+
+void setup() 
+{
+  pinMode(ledpin, OUTPUT);
+  pinMode(enable_pin, OUTPUT); // sets the digital pin 4 as output
+  pinMode(buttonpin,INPUT); //sets the digital pin 9 as input
+}
+void loop() {
+  buttonstate = digitalRead(buttonpin);
+  if (buttonstate == HIGH)
+  {
+    if (buttonActive == false)
+    {
+      buttonActive = true;
+      buttonTimer = millis();
+    }
+      if ((millis() - buttonTimer > longPressTime) && (longPressActive == false)) 
+      {
+          longPressActive = true;
+          enableState = !enableState;
+          digitalWrite(enable_pin, enableState);
+      }
+   }
+  else
+  {
+    if (buttonActive == true)
+    {
+      if (longPressActive == true) 
+      {
+          longPressActive = false;
+      }
+      else
+      {
+          LEDState = !LEDState;  
+          digitalWrite(ledpin, LEDState);
+      }
+      buttonActive = false;
+    }
+  }
+}
