@@ -12,7 +12,7 @@ RTC_DS1307 rtc;
 void setup() {
 rtc.begin();
 lc.shutdown(0, false);
-lc.setIntensity(0,6); // display brightness
+lc.setIntensity(0,15); // display brightness
 lc.clearDisplay(0); // erase display
 rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); //set clock as computer clock
 //rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
