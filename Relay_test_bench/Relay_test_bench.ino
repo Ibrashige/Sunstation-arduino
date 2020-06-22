@@ -1,14 +1,12 @@
 #include <SPI.h>
 #include <SD.h>
 
-int offset_1 = 516; // not used
-int offset_2 = 513; //not used
-int offset_3 = 519; 
+int offset_1 = 516;
+int offset_2 = 513;
+int offset_3 = 519;
 int enable_pin=3;     //Relay signal pin
 int readIndex = 0;              // the index of the current reading
 int total = 0;                  // the running total
-int period = 30000;
-unsigned long time_now = 0;
 float averageamperage = 0;
 const int numReadings = 10;   // value to determine the size of the readings array.
 double currentcharge = 2880;
@@ -56,8 +54,9 @@ void setup() {
 
 void loop() {
   interval = 1; //interval to write data
-  
-  average_amperage();//Calculate Amperage Average
+
+  //Calculate Amperage Average
+  average_amperage();
  
   batterycharge();
 
@@ -72,8 +71,13 @@ void loop() {
 //  amperage_solar = voltage_two / 0.136;
 //  Serial.println(points_two);
   
- float temp = calculatecurrent();
+  points_three = analogRead(A0)- offset_3;
+  voltage_three = points_three * vpp;
+  amperage_battery2 = voltage_three / 0.136;
+  Serial.println(amperage_battery2);
   
+  write_data(amperage_battery2);  //write data 
+
   if(currentcharge<300)
   {
     digitalWrite(enable_pin,HIGH);
@@ -82,8 +86,7 @@ void loop() {
   {
     digitalWrite(enable_pin,LOW);
   }
-  
-  write_data(amperage_battery2);  //write data
+  delay(750);
 }
 
 void average_amperage()
@@ -133,15 +136,6 @@ Serial.println(currentcharge);
  
 }
 
-float calculatecurrent(){
-  points_three = analogRead(A0)- offset_3;
-  voltage_three = points_three * vpp;
-  amperage_battery2 = voltage_three / 0.136;
-  Serial.println(amperage_battery2);
-  delay(750);
-  return amperage_battery2;
-}
-
 void write_data(float amperage_three)
 {
   myFile = SD.open("test.csv", FILE_WRITE);
@@ -156,10 +150,8 @@ void write_data(float amperage_three)
     myFile.println(amperage_three);
     myFile.println("---------------------------");
     myFile.close();
-    delay(30000);
     //Serial.println("Write file successful!"); //print out COM Port
   } else {
    //Serial.println("error opening test.txt");
   }
-  
 }
